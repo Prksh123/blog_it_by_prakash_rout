@@ -1,16 +1,18 @@
 import React from "react";
 
 import classnames from "classnames";
-import NavBar from "components/NavBar";
 import PropTypes from "prop-types";
 
+import SideBar from "./SideBar";
+// import NavBar from "components/NavBar";
+
 const Container = ({ children, className = "" }) => (
-  <>
-    <NavBar />
-    <div className={classnames("mx-auto max-w-6xl px-6", [className])}>
-      {children}
+  <div className="flex h-screen w-screen gap-4">
+    <SideBar />
+    <div className="flex h-screen w-full overflow-y-auto px-6">
+      <div className={classnames("flex-1", className)}>{children}</div>
     </div>
-  </>
+  </div>
 );
 
 Container.propTypes = {

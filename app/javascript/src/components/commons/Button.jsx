@@ -32,7 +32,7 @@ const Button = ({
         {
           "px-4 py-2": size === "medium",
           "px-2 py-1": size === "small",
-          "bg-indigo-600 text-white hover:bg-indigo-700":
+          "bg-indigo-600 text-white hover:bg-slate-600":
             !loading && style === "primary",
           "bg-gray-200 text-gray-800 hover:bg-gray-300":
             !loading && style === "secondary",
