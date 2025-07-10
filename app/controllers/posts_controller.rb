@@ -2,15 +2,25 @@
 
 class PostsController < ApplicationController
   def index
-    posts = Post.all
-    render status: :ok, json: { posts: }
+    posts = Post.includes(:user, :organization, :categories).all
+
+    render status: :ok, json: {
+      posts: posts.as_json(
+        include: {
+          user: { only: [:id, :name] },
+          organization: { only: [:id, :name] },
+          categories: { only: [:id, :name] }
+        },
+        except: [:user_id, :organization_id]
+      )
+    }
   end
 
   def create
     post = Post.new(post_params)
     post.save!
     render_notice("Post was successfully created")
-   end
+  end
 
   def show
     post = Post.find_by!(slug: params[:slug])

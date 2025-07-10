@@ -24,6 +24,7 @@ gem "jsbundling-rails"
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
+gem "bcrypt", "~> 3.1.13"
 gem "jbuilder"
 gem "react-rails", "~> 2.7.1"
 
