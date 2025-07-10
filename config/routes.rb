@@ -9,10 +9,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  Rails.application.routes.draw do
-  resources :posts, only: :index
+  resources :posts, only: :index, param: slug
 
   root "home#index"
   get "*path", to: "home#index", via: :all
-end
 end
