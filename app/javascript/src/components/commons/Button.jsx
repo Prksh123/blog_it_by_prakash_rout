@@ -28,16 +28,24 @@ const Button = ({
       type={type}
       className={classnames(
         [className],
-        "group relative flex items-center justify-center gap-x-2 rounded-md border border-transparent text-sm  font-medium leading-5 transition duration-150 ease-in-out focus:outline-none",
+        "group relative flex items-center justify-center gap-x-2 rounded-md border text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none",
         {
           "px-4 py-2": size === "medium",
           "px-2 py-1": size === "small",
-          "bg-indigo-600 text-white hover:bg-slate-600":
+
+          // 👇 Primary: Black background, white text
+          "bg-black text-white hover:bg-gray-800":
             !loading && style === "primary",
-          "bg-gray-200 text-gray-800 hover:bg-gray-300":
+
+          // 👇 Secondary: White background, black text
+          "border bg-white text-black hover:bg-gray-100":
             !loading && style === "secondary",
+
+          // Loading state
           "bg-gray-300 text-gray-800": loading,
           "cursor-wait": loading,
+
+          // Disabled state
           "cursor-not-allowed opacity-50": disabled,
         }
       )}

@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 
 import postsApi from "apis/posts";
 import { isNil, isEmpty, either } from "ramda";
+import { Link, useHistory } from "react-router-dom";
 
-import { PageLoader, PageTitle, Container } from "../commons";
+import { PageLoader, PageTitle, Container, Button } from "../commons";
 import Card from "../Posts/Card";
 
 const Dashboard = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const history = useHistory();
 
   const fetchTasks = async () => {
     try {
@@ -21,6 +23,10 @@ const Dashboard = () => {
       logger.error(error);
       setLoading(false);
     }
+  };
+
+  const showPost = slug => {
+    history.push(`/posts/${slug}/show`);
   };
 
   useEffect(() => {
@@ -48,8 +54,13 @@ const Dashboard = () => {
   return (
     <Container>
       <div className="flex w-full flex-col gap-y-8 overflow-y-scroll">
-        <PageTitle title="Blog posts" />
-        <Card data={posts} />
+        <div className="flex items-end justify-between ">
+          <PageTitle title="Blog posts" />
+          <Link to="/posts/create">
+            <Button buttonText="Add new blog post" />
+          </Link>
+        </div>
+        <Card data={posts} showPost={showPost} />
       </div>
     </Container>
   );
