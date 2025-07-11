@@ -28,7 +28,9 @@
 #       enabled: "ON"
 
 en:
-post:
+  successfully_created: "%{entity} was successfully created!"
+  successfully_updated: "%{entity} was successfully updated!"
+  post:
     slug:
       immutable: "is immutable!"
     hello: "Hello world"

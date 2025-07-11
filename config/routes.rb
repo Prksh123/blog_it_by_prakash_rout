@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   get "categories/create"
   resources :posts, only: %i[index create show], param: :slug
   resources :categories, only: %i[index create], param: :name
+  resources :users, only: %i[index create]
+  resources :organizations, only: %i[index]
 
   root "home#index"
   get "*path", to: "home#index", via: :all
