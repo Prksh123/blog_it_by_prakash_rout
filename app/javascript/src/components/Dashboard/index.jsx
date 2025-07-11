@@ -4,6 +4,7 @@ import postsApi from "apis/posts";
 import { isNil, isEmpty, either } from "ramda";
 import { Link, useHistory } from "react-router-dom";
 
+import useCategoryStore from "../../store/categoryStore";
 import { PageLoader, PageTitle, Container, Button } from "../commons";
 import Card from "../Posts/Card";
 
@@ -11,7 +12,7 @@ const Dashboard = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const history = useHistory();
-
+  const { selectedCategories } = useCategoryStore();
   const fetchTasks = async () => {
     try {
       const {
@@ -32,6 +33,14 @@ const Dashboard = () => {
   useEffect(() => {
     fetchTasks();
   }, []);
+
+  const filteredPosts = !isEmpty(selectedCategories)
+    ? posts.filter(post =>
+        post.categories?.some(category =>
+          selectedCategories.includes(category.id)
+        )
+      )
+    : posts;
 
   if (loading) {
     return (
@@ -60,7 +69,7 @@ const Dashboard = () => {
             <Button buttonText="Add new blog post" />
           </Link>
         </div>
-        <Card data={posts} showPost={showPost} />
+        <Card data={filteredPosts} showPost={showPost} />
       </div>
     </Container>
   );

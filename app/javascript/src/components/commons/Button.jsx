@@ -38,7 +38,7 @@ const Button = ({
             !loading && style === "primary",
 
           // 👇 Secondary: White background, black text
-          "border bg-white text-black hover:bg-gray-100":
+          "border-2 bg-white text-black hover:bg-gray-100":
             !loading && style === "secondary",
 
           // Loading state
