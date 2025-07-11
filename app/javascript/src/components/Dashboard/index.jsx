@@ -53,8 +53,14 @@ const Dashboard = () => {
   if (either(isNil, isEmpty)(posts)) {
     return (
       <Container>
-        <h1 className="my-5 text-center text-xl leading-5">
-          You have not created or been assigned any tasks 🥳
+        <div className="flex items-end justify-between ">
+          <PageTitle title="Blog posts" />
+          <Link to="/posts/create">
+            <Button buttonText="Add new blog post" />
+          </Link>
+        </div>
+        <h1 className="my-10 h-full w-full text-center text-xl leading-5">
+          You have not created any posts 🥳
         </h1>
       </Container>
     );
