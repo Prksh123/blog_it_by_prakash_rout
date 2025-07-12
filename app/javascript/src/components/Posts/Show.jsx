@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 
+import { Edit } from "@bigbinary/neeto-icons";
 import { Typography } from "antd";
 import postsApi from "apis/posts";
 import { Container, PageLoader } from "components/commons";
 import { useHistory, useParams } from "react-router-dom";
+
+import { getFromLocalStorage } from "../../utils/storage";
 
 const Show = () => {
   const [post, setPost] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
   const { slug } = useParams();
   const history = useHistory();
+  const currentUserId = getFromLocalStorage("authUserId");
 
   const fetchPostDetails = async () => {
     try {
@@ -22,6 +26,10 @@ const Show = () => {
       logger.error(error);
       history.push("/");
     }
+  };
+
+  const editPost = slug => {
+    history.push(`/posts/${slug}/edit`);
   };
 
   useEffect(() => {
@@ -49,9 +57,9 @@ const Show = () => {
 
   return (
     <Container>
-      <div className="gap-y-15 flex flex-col">
-        <div className="mt-8 flex w-full items-start justify-between gap-x-6">
-          <div className="flex flex-col gap-y-2">
+      <div className="gap-y-15 flex w-full flex-col">
+        <div className="mt-8 flex w-full items-center justify-center gap-x-6">
+          <div className="flex w-11/12 flex-col gap-y-2">
             <div className="mb-2 flex flex-wrap gap-2">
               {categories?.map(category => (
                 <span
@@ -62,7 +70,12 @@ const Show = () => {
                 </span>
               ))}
             </div>
-            <h2 className="text-3xl font-semibold">{title}</h2>
+            <div className="flex w-full items-end justify-between">
+              <h2 className="text-3xl font-semibold">{title}</h2>
+              {currentUserId === post.user?.id && (
+                <Edit onClick={() => editPost(slug)} />
+              )}
+            </div>
             <div className="mt-3 flex gap-4">
               <img
                 alt="Not found"

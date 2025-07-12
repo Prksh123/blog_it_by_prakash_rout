@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   Rails.application.routes.draw do
   get "categories/index"
   get "categories/create"
-  resources :posts, only: %i[index create show], param: :slug
+  resources :posts, except: %i[new edit destroy], param: :slug
   resources :categories, only: %i[index create], param: :name
   resources :users, only: %i[index create]
   resources :organizations, only: %i[index]

@@ -53,7 +53,7 @@ const Form = ({
       className="mb-4 flex h-full w-full flex-col justify-between space-y-2 p-8"
       onSubmit={handleSubmit}
     >
-      <div className="flex flex-col gap-8">
+      <div className="flex h-full flex-col gap-8">
         <Input
           label="Title*"
           placeholder="Enter title"
@@ -73,12 +73,12 @@ const Form = ({
             onChange={handleCategoryChange}
           />
         </div>
-        <div className="mb-4">
+        <div className="mb-4 h-full">
           <label className="mb-2 block text-sm" htmlFor="description">
             Description*
           </label>
           <textarea
-            className="h-32 w-full rounded-md border border-gray-300 p-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="h-3/4 w-full rounded-md border border-gray-300 p-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="description"
             name="description"
             placeholder="Enter description..."
@@ -87,21 +87,23 @@ const Form = ({
           />
         </div>
       </div>
-      <div className="flex justify-end gap-5">
-        <Button
-          buttonText="Cancel"
-          size="medium"
-          style="secondary"
-          onClick={() => history.back()}
-        />
-        <Button
-          buttonText={type === "create" ? "Submit" : "Update Task"}
-          loading={loading}
-          size="medium"
-          style="primary"
-          type="submit"
-        />
-      </div>
+      {type === "create" && (
+        <div className="flex justify-end gap-5">
+          <Button
+            buttonText="Cancel"
+            size="medium"
+            style="secondary"
+            onClick={() => history.back()}
+          />
+          <Button
+            buttonText={type === "create" ? "Submit" : "Update Post"}
+            loading={loading}
+            size="medium"
+            style="primary"
+            type="submit"
+          />
+        </div>
+      )}
     </form>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 
+import { Edit, List, ListDetails } from "@bigbinary/neeto-icons";
 import { Popover, Typography } from "@bigbinary/neetoui";
 import { resetAuthTokens } from "apis/axios";
 import { Link } from "react-router-dom";
@@ -11,6 +12,7 @@ import { getFromLocalStorage, setToLocalStorage } from "../../utils/storage";
 
 const SideBar = ({ showPanel }) => {
   const userName = getFromLocalStorage("authUserName");
+  const userEmail = getFromLocalStorage("authEmail");
   const avatarRef = useRef(null);
 
   const handleLogout = async () => {
@@ -35,28 +37,15 @@ const SideBar = ({ showPanel }) => {
         <img
           alt="Not showing"
           className="h-5 w-5"
-          src="https://cdn-icons-png.flaticon.com/128/582/582929.png"
+          src="https://img.icons8.com/?size=100&id=tz1GQBtNqT2P&format=png&color=000000"
         />
         <Link to="/">
-          <img
-            alt="Not showing"
-            className="h-5 w-5"
-            src="https://cdn-icons-png.flaticon.com/128/17433/17433939.png"
-          />
+          <List className="h-6 w-6 cursor-pointer" />
         </Link>
         <Link to="/posts/create">
-          <img
-            alt="Not showing"
-            className="h-5 w-5"
-            src="https://cdn-icons-png.flaticon.com/128/16/16941.png"
-          />
+          <Edit className="h-6 w-6 cursor-pointer" />
         </Link>
-        <img
-          alt="Not showing"
-          className="h-5 w-5"
-          src="https://cdn-icons-png.flaticon.com/128/324/324687.png"
-          onClick={showPanel}
-        />
+        <ListDetails className="h-6 w-6 cursor-pointer" onClick={showPanel} />
       </div>
       <div className="flex flex-col items-center">
         <img
@@ -67,8 +56,11 @@ const SideBar = ({ showPanel }) => {
         />
         <Popover className="w-auto" position="right" reference={avatarRef}>
           <div className="flex flex-col gap-1 px-2 py-4">
-            <Typography style="body1" weight="medium">
+            <Typography className="text-center" style="body1" weight="semibold">
               {userName}
+            </Typography>
+            <Typography style="body1" weight="medium">
+              {userEmail}
             </Typography>
             <Button
               buttonText="Logout"
