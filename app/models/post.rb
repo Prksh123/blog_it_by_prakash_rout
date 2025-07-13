@@ -4,6 +4,7 @@ class Post < ApplicationRecord
   MAX_TITLE_LENGTH = 125
   MAX_DESCRIPTION_LENGTH = 10_000
   VALID_TITLE_REGEX = /\A.*[a-zA-Z0-9].*\z/i
+  enum status: { draft: 0, published: 1 }
   has_and_belongs_to_many :categories
   belongs_to :user
   belongs_to :organization
@@ -21,6 +22,7 @@ class Post < ApplicationRecord
 
   validates :slug, uniqueness: true
   validate :slug_not_changed
+  validates :status, presence: true
 
   before_create :set_slug
 

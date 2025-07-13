@@ -1,15 +1,13 @@
 import React, { useEffect } from "react";
 
-import { Input, Button } from "components/commons";
+import { Input } from "components/commons";
 import Select from "react-select";
 
 import categoriesApi from "../../apis/categories";
 
 const Form = ({
-  type = "create",
   title,
   setTitle,
-  loading,
   handleSubmit,
   description,
   setDescription,
@@ -87,7 +85,7 @@ const Form = ({
           />
         </div>
       </div>
-      {type === "create" && (
+      {/* {type === "create" && (
         <div className="flex justify-end gap-5">
           <Button
             buttonText="Cancel"
@@ -103,7 +101,7 @@ const Form = ({
             type="submit"
           />
         </div>
-      )}
+      )} */}
     </form>
   );
 };

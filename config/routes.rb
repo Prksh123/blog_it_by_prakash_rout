@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   # JSON API-only routes
   constraints(lambda { |req| req.format == :json }) do
-    resources :posts, except: %i[new edit destroy], param: :slug
+    resources :posts, except: %i[new edit], param: :slug
     resources :categories, only: %i[index create], param: :name
     resources :users, only: %i[index create]
     resources :organizations, only: %i[index]

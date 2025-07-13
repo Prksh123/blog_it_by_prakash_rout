@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 
 import postsApi from "apis/posts";
-import { Container, PageTitle } from "components/commons";
+import { Container } from "components/commons";
 
 import Form from "./Form";
+
+import PostHeader from "../commons/Header";
 
 const Create = ({ history }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [categories, setCategories] = useState([]);
+  const [status, setStatus] = useState("published");
   const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -20,6 +23,7 @@ const Create = ({ history }) => {
         title,
         description,
         category_ids: selectedCategoryIds,
+        status,
       });
       setLoading(false);
       history.push("/dashboard");
@@ -32,7 +36,14 @@ const Create = ({ history }) => {
   return (
     <Container>
       <div className="flex h-full flex-col gap-y-8">
-        <PageTitle title="New blog post" />
+        <PostHeader
+          handleSubmit={handleSubmit}
+          loading={loading}
+          setStatus={setStatus}
+          status={status}
+          title="New Blog Post"
+          onCancel={() => history.goBack()}
+        />
         <div className="h-3/4 w-full border">
           <Form
             categories={categories}

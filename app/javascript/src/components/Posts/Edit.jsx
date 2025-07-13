@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 
 import postsApi from "apis/posts";
-import { Container, PageLoader, PageTitle } from "components/commons";
+import { Container, PageLoader } from "components/commons";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 import Form from "./Form";
 
-import { Button } from "../commons";
+import PostHeader from "../commons/Header";
 
 const Edit = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
+  const [status, setStatus] = useState("published");
+  const [updatedTime, setUpdatedTime] = useState("");
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const { slug } = useParams();
@@ -24,7 +26,12 @@ const Edit = () => {
     try {
       await postsApi.update({
         slug,
-        payload: { title, description, category_ids: selectedCategoryIds },
+        payload: {
+          title,
+          description,
+          category_ids: selectedCategoryIds,
+          status,
+        },
       });
       setLoading(false);
       history.push("/dashboard");
@@ -38,13 +45,15 @@ const Edit = () => {
     try {
       const {
         data: {
-          post: { title, description, categories },
+          post: { title, description, categories, status, updated_at },
         },
       } = await postsApi.show(slug);
       setTitle(title);
       setDescription(description);
       setCategories(categories);
       setSelectedCategoryIds(categories.map(category => category.id));
+      setStatus(status);
+      setUpdatedTime(updated_at);
     } catch (error) {
       logger.error(error);
     } finally {
@@ -67,23 +76,16 @@ const Edit = () => {
   return (
     <Container>
       <div className="flex h-full flex-col gap-y-5">
-        <div className="flex justify-between px-5">
-          <PageTitle title="Edit blog post" />
-          <div className="flex items-end gap-5">
-            <Button
-              buttonText="Cancel"
-              loading={loading}
-              style="secondary"
-              onClick={() => history.goBack()}
-            />
-            <Button
-              buttonText="Publish"
-              loading={loading}
-              style="primary"
-              onClick={handleSubmit}
-            />
-          </div>
-        </div>
+        <PostHeader
+          showDelete
+          handleSubmit={handleSubmit}
+          loading={loading}
+          setStatus={setStatus}
+          status={status}
+          title="Edit blog post"
+          updatedTime={updatedTime}
+          onCancel={() => history.goBack()}
+        />
         <Form
           categories={categories}
           description={description}

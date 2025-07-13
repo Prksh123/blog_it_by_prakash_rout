@@ -4,6 +4,7 @@ json.id post.id
 json.title post.title
 json.slug post.slug
 json.description post.description
+json.status post.status
 json.created_at post.created_at
 json.updated_at post.updated_at
 

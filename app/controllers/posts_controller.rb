@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PostsController < ApplicationController
-  before_action :load_post!, only: [:update]
+  before_action :load_post!, only: [:update, :destroy]
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
   def index
@@ -14,6 +14,7 @@ class PostsController < ApplicationController
     post.organization = current_user.organization
     post.category_ids = post_params[:category_ids] if post_params[:category_ids]
     authorize post
+    post.status = post_params[:status] if Post.statuses.key?(post_params[:status])
     post.save!
     render_notice(t("successfully_created", entity: "Post"))
   end
@@ -28,13 +29,19 @@ class PostsController < ApplicationController
     authorize @post
     @post.update!(post_params)
     @post.update_column(:created_at, Time.current)
-    render_notice("Task was successfully updated!")
+    render_notice(t("successfully_updated", entity: "Post"))
+  end
+
+  def destroy
+    authorize @post
+    @post.destroy!
+    render_notice(t("successfully_deleted", entity: "Post"))
   end
 
   private
 
     def post_params
-      params.require(:post).permit(:title, :description, category_ids: [])
+      params.require(:post).permit(:title, :description, :status, category_ids: [])
     end
 
     def load_post!
