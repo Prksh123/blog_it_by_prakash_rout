@@ -3,24 +3,20 @@
 Rails.application.routes.draw do
   get "categories/index"
   get "categories/create"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Health check
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Defines the root path route ("/")
-  # root "posts#index"
-  Rails.application.routes.draw do
-  get "categories/index"
-  get "categories/create"
-  resources :posts, except: %i[new edit destroy], param: :slug
-  resources :categories, only: %i[index create], param: :name
-  resources :users, only: %i[index create]
-  resources :organizations, only: %i[index]
-  resource :session, only: [:create, :destroy]
+  # JSON API-only routes
+  constraints(lambda { |req| req.format == :json }) do
+    resources :posts, except: %i[new edit destroy], param: :slug
+    resources :categories, only: %i[index create], param: :name
+    resources :users, only: %i[index create]
+    resources :organizations, only: %i[index]
+    resource :session, only: %i[create destroy]
+  end
 
+  # React frontend fallback
   root "home#index"
   get "*path", to: "home#index", via: :all
-end
 end

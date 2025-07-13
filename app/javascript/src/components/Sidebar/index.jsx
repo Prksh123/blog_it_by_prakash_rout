@@ -5,10 +5,9 @@ import { Popover, Typography } from "@bigbinary/neetoui";
 import { resetAuthTokens } from "apis/axios";
 import { Link } from "react-router-dom";
 
-import Button from "./Button";
-
 import authApi from "../../apis/auth";
 import { getFromLocalStorage, setToLocalStorage } from "../../utils/storage";
+import Button from "../commons/Button";
 
 const SideBar = ({ showPanel }) => {
   const userName = getFromLocalStorage("authUserName");

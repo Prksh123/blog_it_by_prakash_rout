@@ -24,6 +24,10 @@ class Post < ApplicationRecord
 
   before_create :set_slug
 
+  def can_edit_by?(user)
+    user_id == user&.id
+  end
+
   private
 
     def set_slug

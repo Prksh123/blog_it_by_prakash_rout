@@ -5,18 +5,7 @@ class PostsController < ApplicationController
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
   def index
-    posts = policy_scope(Post.includes(:user, :organization, :categories))
-
-    render status: :ok, json: {
-      posts: posts.as_json(
-        include: {
-          user: { only: [:id, :name] },
-          organization: { only: [:id, :name] },
-          categories: { only: [:id, :name] }
-        },
-        except: [:user_id, :organization_id]
-      )
-    }
+    @posts = policy_scope(Post.includes(:user, :organization, :categories))
   end
 
   def create
@@ -30,19 +19,9 @@ class PostsController < ApplicationController
   end
 
   def show
-    post = Post.includes(:user, :organization, :categories).find_by!(slug: params[:slug])
-    authorize post
-
-    render status: :ok, json: {
-      post: post.as_json(
-        include: {
-          user: { only: [:id, :name] },
-          organization: { only: [:id, :name] },
-          categories: { only: [:id, :name] }
-        },
-        except: [:user_id, :organization_id]
-      ).merge(can_edit: post.user_id == current_user.id) # ✅ Inject here
-    }
+    @post = Post.includes(:user, :organization, :categories).find_by!(slug: params[:slug])
+    authorize @post
+    render :show
   end
 
   def update

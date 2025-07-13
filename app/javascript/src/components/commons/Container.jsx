@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import classnames from "classnames";
 import PropTypes from "prop-types";
 
-import SideBar from "./SideBar";
 import SidePanel from "./SidePanel";
+
+import SideBar from "../Sidebar";
 // import NavBar from "components/NavBar";
 
 const Container = ({ children, className = "" }) => {

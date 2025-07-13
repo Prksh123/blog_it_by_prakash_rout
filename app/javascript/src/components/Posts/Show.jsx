@@ -33,7 +33,7 @@ const Show = () => {
     fetchPostDetails();
   }, []);
 
-  if (pageLoading) {
+  if (pageLoading || !post) {
     return <PageLoader />;
   }
 
@@ -43,6 +43,7 @@ const Show = () => {
     created_at,
     categories,
     user: { name },
+    can_edit,
   } = post;
 
   const date = new Date(created_at);
@@ -69,7 +70,7 @@ const Show = () => {
             </div>
             <div className="flex w-full items-end justify-between">
               <h2 className="text-3xl font-semibold">{title}</h2>
-              {post.can_edit && <Edit onClick={() => editPost(slug)} />}
+              {can_edit && <Edit onClick={() => editPost(slug)} />}
             </div>
             <div className="mt-3 flex gap-4">
               <img
