@@ -6,14 +6,11 @@ import postsApi from "apis/posts";
 import { Container, PageLoader } from "components/commons";
 import { useHistory, useParams } from "react-router-dom";
 
-import { getFromLocalStorage } from "../../utils/storage";
-
 const Show = () => {
   const [post, setPost] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
   const { slug } = useParams();
   const history = useHistory();
-  const currentUserId = getFromLocalStorage("authUserId");
 
   const fetchPostDetails = async () => {
     try {
@@ -72,9 +69,7 @@ const Show = () => {
             </div>
             <div className="flex w-full items-end justify-between">
               <h2 className="text-3xl font-semibold">{title}</h2>
-              {currentUserId === post.user?.id && (
-                <Edit onClick={() => editPost(slug)} />
-              )}
+              {post.can_edit && <Edit onClick={() => editPost(slug)} />}
             </div>
             <div className="mt-3 flex gap-4">
               <img

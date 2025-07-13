@@ -17,7 +17,9 @@ const Create = ({ history }) => {
     setLoading(true);
     try {
       await postsApi.create({
-        post: { title, description, category_ids: selectedCategoryIds },
+        title,
+        description,
+        category_ids: selectedCategoryIds,
       });
       setLoading(false);
       history.push("/dashboard");

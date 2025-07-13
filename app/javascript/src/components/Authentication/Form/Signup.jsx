@@ -39,8 +39,7 @@ const Signup = ({
         <div className="text-center">
           <Link
             to="/"
-            className="mt-2 text-center text-sm font-medium
-              font-medium transition duration-150 ease-in-out
+            className="mt-2 text-center text-sm font-medium transition duration-150 ease-in-out
               focus:underline focus:outline-none"
           >
             Or Login Now

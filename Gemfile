@@ -26,6 +26,7 @@ gem "jsbundling-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "bcrypt", "~> 3.1.13"
 gem "jbuilder"
+gem "pundit"
 gem "react-rails", "~> 2.7.1"
 
 # Use Redis adapter to run Action Cable in production

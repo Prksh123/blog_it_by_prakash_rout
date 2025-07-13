@@ -2,8 +2,10 @@
 
 class PostsController < ApplicationController
   before_action :load_post!, only: [:update]
+  after_action :verify_authorized, except: :index
+  after_action :verify_policy_scoped, only: :index
   def index
-    posts = Post.includes(:user, :organization, :categories).where(organization_id: current_user.organization_id)
+    posts = policy_scope(Post.includes(:user, :organization, :categories))
 
     render status: :ok, json: {
       posts: posts.as_json(
@@ -22,12 +24,14 @@ class PostsController < ApplicationController
     post.user = current_user
     post.organization = current_user.organization
     post.category_ids = post_params[:category_ids] if post_params[:category_ids]
+    authorize post
     post.save!
     render_notice(t("successfully_created", entity: "Post"))
   end
 
   def show
     post = Post.includes(:user, :organization, :categories).find_by!(slug: params[:slug])
+    authorize post
 
     render status: :ok, json: {
       post: post.as_json(
@@ -37,11 +41,12 @@ class PostsController < ApplicationController
           categories: { only: [:id, :name] }
         },
         except: [:user_id, :organization_id]
-      )
+      ).merge(can_edit: post.user_id == current_user.id) # ✅ Inject here
     }
   end
 
   def update
+    authorize @post
     @post.update!(post_params)
     @post.update_column(:created_at, Time.current)
     render_notice("Task was successfully updated!")
