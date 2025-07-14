@@ -15,6 +15,7 @@ const Edit = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
   const [status, setStatus] = useState("published");
+  const [savedStatus, setSavedStatus] = useState("published");
   const [updatedTime, setUpdatedTime] = useState("");
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
@@ -33,8 +34,9 @@ const Edit = () => {
           status,
         },
       });
+      setSavedStatus(status);
       setLoading(false);
-      history.push("/dashboard");
+      history.push("/");
     } catch (error) {
       setLoading(false);
       logger.error(error);
@@ -54,6 +56,7 @@ const Edit = () => {
       setSelectedCategoryIds(categories.map(category => category.id));
       setStatus(status);
       setUpdatedTime(updated_at);
+      setSavedStatus(status);
     } catch (error) {
       logger.error(error);
     } finally {
@@ -77,10 +80,12 @@ const Edit = () => {
     <Container>
       <div className="flex h-full flex-col gap-y-5">
         <PostHeader
-          showDelete
+          showOptions
           handleSubmit={handleSubmit}
           loading={loading}
+          savedStatus={savedStatus}
           setStatus={setStatus}
+          setUpdatedTime={setUpdatedTime}
           status={status}
           title="Edit blog post"
           updatedTime={updatedTime}

@@ -11,7 +11,7 @@ const Create = ({ history }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [categories, setCategories] = useState([]);
-  const [status, setStatus] = useState("published");
+  const [status, setStatus] = useState("draft");
   const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -26,7 +26,7 @@ const Create = ({ history }) => {
         status,
       });
       setLoading(false);
-      history.push("/dashboard");
+      history.push("/");
     } catch (error) {
       logger.error(error);
       setLoading(false);

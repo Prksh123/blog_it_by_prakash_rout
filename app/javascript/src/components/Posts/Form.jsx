@@ -8,7 +8,6 @@ import categoriesApi from "../../apis/categories";
 const Form = ({
   title,
   setTitle,
-  handleSubmit,
   description,
   setDescription,
   categories,
@@ -47,10 +46,7 @@ const Form = ({
   }, [setCategories]);
 
   return (
-    <form
-      className="mb-4 flex h-full w-full flex-col justify-between space-y-2 p-8"
-      onSubmit={handleSubmit}
-    >
+    <form className="mb-4 flex h-full w-full flex-col justify-between space-y-2 p-8">
       <div className="flex h-full flex-col gap-8">
         <Input
           label="Title*"
@@ -85,23 +81,6 @@ const Form = ({
           />
         </div>
       </div>
-      {/* {type === "create" && (
-        <div className="flex justify-end gap-5">
-          <Button
-            buttonText="Cancel"
-            size="medium"
-            style="secondary"
-            onClick={() => history.back()}
-          />
-          <Button
-            buttonText={type === "create" ? "Submit" : "Update Post"}
-            loading={loading}
-            size="medium"
-            style="primary"
-            type="submit"
-          />
-        </div>
-      )} */}
     </form>
   );
 };

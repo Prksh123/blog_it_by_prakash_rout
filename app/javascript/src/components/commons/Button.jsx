@@ -28,7 +28,7 @@ const Button = ({
       type={type}
       className={classnames(
         [className],
-        "group relative flex items-center justify-center gap-x-2 rounded-md border text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none",
+        "group relative flex items-center justify-center gap-x-2 rounded-md border-2 border-black text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none",
         {
           "px-4 py-2": size === "medium",
           "px-2 py-1": size === "small",
@@ -38,7 +38,7 @@ const Button = ({
             !loading && style === "primary",
 
           // 👇 Secondary: White background, black text
-          "border-2 bg-white text-black hover:bg-gray-100":
+          "border-2 border-black bg-white text-black hover:bg-gray-100":
             !loading && style === "secondary",
 
           // Loading state

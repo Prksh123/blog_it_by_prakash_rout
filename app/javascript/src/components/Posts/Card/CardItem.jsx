@@ -1,6 +1,8 @@
 // PostCard.jsx
 import React from "react";
 
+import { Typography } from "@bigbinary/neetoui";
+
 const CardItem = ({
   title,
   created_at,
@@ -18,12 +20,13 @@ const CardItem = ({
 
   return (
     <div className="flex h-auto w-full flex-col gap-2 border-b bg-slate-50 p-3">
-      <h1
+      <Typography
         className="cursor-pointer text-xl font-semibold"
+        style="h1"
         onClick={() => showPost(slug)}
       >
         {title}
-      </h1>
+      </Typography>
       <div className="mb-2 flex flex-wrap gap-2">
         {categoryNames?.map(category => (
           <span
@@ -34,8 +37,12 @@ const CardItem = ({
           </span>
         ))}
       </div>
-      <p className="font-semibold">{userName}</p>
-      <p className="text-xs  text-gray-500">{formatted}</p>
+      <Typography className="font-semibold" style="body1">
+        {userName}
+      </Typography>
+      <Typography className="text-xs  text-gray-500" style="body1">
+        {formatted}
+      </Typography>
     </div>
   );
 };

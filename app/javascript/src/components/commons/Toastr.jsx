@@ -2,11 +2,14 @@ import { TOASTR_OPTIONS } from "constants";
 
 import React from "react";
 
+import { Typography } from "@bigbinary/neetoui";
 import { toast } from "react-toastify";
 
 const ToastrComponent = ({ message }) => (
   <div className="flex flex-row items-start justify-start">
-    <p className="mx-4 font-medium leading-5 text-white">{message}</p>
+    <Typography className="mx-4 font-medium leading-5 text-white">
+      {message}
+    </Typography>
   </div>
 );
 

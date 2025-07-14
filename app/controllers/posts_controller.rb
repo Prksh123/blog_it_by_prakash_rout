@@ -2,7 +2,7 @@
 
 class PostsController < ApplicationController
   before_action :load_post!, only: [:update, :destroy]
-  after_action :verify_authorized, except: :index
+  after_action :verify_authorized, except: [:index, :my_posts]
   after_action :verify_policy_scoped, only: :index
   def index
     @posts = policy_scope(Post.includes(:user, :organization, :categories))
@@ -36,6 +36,10 @@ class PostsController < ApplicationController
     authorize @post
     @post.destroy!
     render_notice(t("successfully_deleted", entity: "Post"))
+  end
+
+  def my_posts
+    @posts = current_user.posts.includes(:categories)
   end
 
   private

@@ -8,6 +8,7 @@ import { getFromLocalStorage } from "utils/storage";
 
 import { PrivateRoute } from "./components/commons";
 import Dashboard from "./components/Dashboard";
+import MyBlogs from "./components/MyBlogs";
 import { CreatePost, ShowPost, EditPost } from "./components/Posts";
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
         <Route exact component={ShowPost} path="/posts/:slug/show" />
         <Route exact component={Signup} path="/signup" />
         <Route exact component={Login} path="/login" />
+        <Route exact component={MyBlogs} path="/my-blogs" />
         <PrivateRoute
           component={Dashboard}
           condition={isLoggedIn}

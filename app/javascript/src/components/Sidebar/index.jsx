@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 
-import { Edit, List, ListDetails } from "@bigbinary/neeto-icons";
+import { Edit, List, ListDetails, Folder } from "@bigbinary/neeto-icons";
 import { Popover, Typography } from "@bigbinary/neetoui";
 import { resetAuthTokens } from "apis/axios";
 import { Link } from "react-router-dom";
@@ -44,7 +44,12 @@ const SideBar = ({ showPanel }) => {
         <Link to="/posts/create">
           <Edit className="h-6 w-6 cursor-pointer" />
         </Link>
-        <ListDetails className="h-6 w-6 cursor-pointer" onClick={showPanel} />
+        {window.location.pathname === "/" && (
+          <ListDetails className="h-6 w-6 cursor-pointer" onClick={showPanel} />
+        )}
+        <Link to="/my-blogs">
+          <Folder className="h-6 w-6 cursor-pointer" />
+        </Link>
       </div>
       <div className="flex flex-col items-center">
         <img

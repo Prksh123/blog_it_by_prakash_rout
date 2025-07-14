@@ -33,7 +33,7 @@ class PostPolicy
     end
 
     def resolve
-      scope.where(organization_id: user.organization_id)
+      scope.where(organization_id: user.organization_id, status: "published")
     end
   end
 

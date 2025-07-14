@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+import { Typography } from "@bigbinary/neetoui";
 import postsApi from "apis/posts";
 import { isNil, isEmpty, either } from "ramda";
 import { Link, useHistory } from "react-router-dom";
@@ -59,9 +60,12 @@ const Dashboard = () => {
             <Button buttonText="Add new blog post" />
           </Link>
         </div>
-        <h1 className="my-10 h-full w-full text-center text-xl leading-5">
+        <Typography
+          className="my-10 h-full w-full text-center text-xl leading-5"
+          style="h1"
+        >
           You have not created any posts 🥳
-        </h1>
+        </Typography>
       </Container>
     );
   }

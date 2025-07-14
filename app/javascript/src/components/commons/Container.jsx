@@ -6,7 +6,6 @@ import PropTypes from "prop-types";
 import SidePanel from "./SidePanel";
 
 import SideBar from "../Sidebar";
-// import NavBar from "components/NavBar";
 
 const Container = ({ children, className = "" }) => {
   const [showPanel, setShowPanel] = useState(false);

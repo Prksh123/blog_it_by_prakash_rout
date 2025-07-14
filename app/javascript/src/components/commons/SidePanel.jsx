@@ -77,7 +77,7 @@ const SidePanel = () => {
       </div>
       <div className="my-3 w-full">
         {loading ? (
-          <p>Loading...</p>
+          <Typography style="body1">Loading...</Typography>
         ) : (
           <ul className="space-y-2">
             {searchedCategories.map(category => {
