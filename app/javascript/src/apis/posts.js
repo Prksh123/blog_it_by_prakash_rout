@@ -6,7 +6,7 @@ const show = slug => axios.get(`/posts/${slug}`);
 
 const create = payload => axios.post("/posts", { post: payload });
 
-const update = ({ slug, payload }) =>
+const update = (slug, payload) =>
   axios.put(`/posts/${slug}`, {
     post: payload,
   });

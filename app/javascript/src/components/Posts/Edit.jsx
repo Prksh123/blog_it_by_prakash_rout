@@ -1,31 +1,37 @@
 import React, { useState, useEffect } from "react";
 
-import postsApi from "apis/posts";
 import { Container, PageLoader } from "components/commons";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 import Form from "./Form";
 
+import {
+  useShowPostBySlug,
+  useUpdatePost,
+} from "../../hooks/reactQuery/usePostsApi";
 import PostHeader from "../commons/Header";
 
 const Edit = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [categories, setCategories] = useState([]);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
   const [status, setStatus] = useState("published");
   const [savedStatus, setSavedStatus] = useState("published");
   const [updatedTime, setUpdatedTime] = useState("");
   const [loading, setLoading] = useState(false);
-  const [pageLoading, setPageLoading] = useState(true);
   const { slug } = useParams();
   const history = useHistory();
 
-  const handleSubmit = async event => {
+  const { data, isLoading } = useShowPostBySlug(slug);
+  const { mutate: updatePost } = useUpdatePost();
+
+  const handleSubmit = event => {
     event.preventDefault();
-    try {
-      await postsApi.update({
+    setLoading(true);
+
+    updatePost(
+      {
         slug,
         payload: {
           title,
@@ -33,42 +39,33 @@ const Edit = () => {
           category_ids: selectedCategoryIds,
           status,
         },
-      });
-      setSavedStatus(status);
-      setLoading(false);
-      history.push("/");
-    } catch (error) {
-      setLoading(false);
-      logger.error(error);
-    }
-  };
-
-  const fetchPostDetails = async () => {
-    try {
-      const {
-        data: {
-          post: { title, description, categories, status, updated_at },
+      },
+      {
+        onSuccess: () => {
+          setLoading(false);
+          history.push("/");
         },
-      } = await postsApi.show(slug);
-      setTitle(title);
-      setDescription(description);
-      setCategories(categories);
-      setSelectedCategoryIds(categories.map(category => category.id));
-      setStatus(status);
-      setUpdatedTime(updated_at);
-      setSavedStatus(status);
-    } catch (error) {
-      logger.error(error);
-    } finally {
-      setPageLoading(false);
-    }
+        onError: error => {
+          setLoading(false);
+          logger.error(error);
+        },
+      }
+    );
   };
 
   useEffect(() => {
-    fetchPostDetails();
-  }, []);
+    if (data) {
+      const post = data.post;
+      setTitle(post.title);
+      setDescription(post.description);
+      setSelectedCategoryIds(post.categories?.map(category => category.id));
+      setStatus(post.status);
+      setUpdatedTime(post.updated_at);
+      setSavedStatus(post.status);
+    }
+  }, [data]);
 
-  if (pageLoading) {
+  if (isLoading) {
     return (
       <div className="h-screen w-screen">
         <PageLoader />
@@ -92,12 +89,10 @@ const Edit = () => {
           onCancel={() => history.goBack()}
         />
         <Form
-          categories={categories}
           description={description}
           handleSubmit={handleSubmit}
           loading={loading}
           selectedCategoryIds={selectedCategoryIds}
-          setCategories={setCategories}
           setDescription={setDescription}
           setSelectedCategoryIds={setSelectedCategoryIds}
           setTitle={setTitle}

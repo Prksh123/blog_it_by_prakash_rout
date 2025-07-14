@@ -1,59 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import authApi from "apis/auth";
 import SignupForm from "components/Authentication/Form/Signup";
 
-import organizationsApi from "../../apis/organizations";
+import { useSignup } from "../../hooks/reactQuery/authApi";
+import { useFetchOrganizations } from "../../hooks/reactQuery/useOrganizationApi";
 
 const Signup = ({ history }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [organizations, setOrganizations] = useState([]);
   const [selectedOrganization, setSelectedOrganization] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { data } = useFetchOrganizations();
+  const organizations = data?.organizations || [];
+  const { mutate: signUp, isLoading } = useSignup();
 
-  const handleSubmit = async event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    setLoading(true);
-    try {
-      await authApi.signup({
+
+    signUp(
+      {
         name,
         email,
         password,
         password_confirmation: passwordConfirmation,
         organization_id: selectedOrganization.value,
-      });
-      setLoading(false);
-      history.push("/dashboard");
-    } catch (error) {
-      logger.error(error);
-      setLoading(false);
-    }
+      },
+      {
+        onSuccess: () => {
+          history.push("/");
+        },
+        onError: error => {
+          logger.error(error);
+        },
+      }
+    );
   };
-
-  const fetchOrganizations = async () => {
-    try {
-      const {
-        data: { organizations },
-      } = await organizationsApi.fetch();
-      setOrganizations(organizations);
-      setLoading(false);
-    } catch (error) {
-      logger.error(error);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchOrganizations();
-  }, []);
 
   return (
     <SignupForm
       handleSubmit={handleSubmit}
-      loading={loading}
+      loading={isLoading}
       organizations={organizations}
       selectedOrganization={selectedOrganization}
       setEmail={setEmail}

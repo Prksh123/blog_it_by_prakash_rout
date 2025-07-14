@@ -1,36 +1,41 @@
 import React, { useState } from "react";
 
-import postsApi from "apis/posts";
 import { Container } from "components/commons";
 
 import Form from "./Form";
 
+import { useCreatePost } from "../../hooks/reactQuery/usePostsApi";
 import PostHeader from "../commons/Header";
 
 const Create = ({ history }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [status, setStatus] = useState("draft");
+  const [status, setStatus] = useState("published");
+  const { mutate: createPost } = useCreatePost();
   const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async event => {
     event.preventDefault();
     setLoading(true);
-    try {
-      await postsApi.create({
+    createPost(
+      {
         title,
         description,
         category_ids: selectedCategoryIds,
         status,
-      });
-      setLoading(false);
-      history.push("/");
-    } catch (error) {
-      logger.error(error);
-      setLoading(false);
-    }
+      },
+      {
+        onSuccess: () => {
+          setLoading(false);
+          history.push("/");
+        },
+        onError: error => {
+          setLoading(false);
+          logger.error(error);
+        },
+      }
+    );
   };
 
   return (
@@ -46,12 +51,9 @@ const Create = ({ history }) => {
         />
         <div className="h-3/4 w-full border">
           <Form
-            categories={categories}
             description={description}
-            handleSubmit={handleSubmit}
             loading={loading}
             selectedCategoryIds={selectedCategoryIds}
-            setCategories={setCategories}
             setDescription={setDescription}
             setSelectedCategoryIds={setSelectedCategoryIds}
             setTitle={setTitle}

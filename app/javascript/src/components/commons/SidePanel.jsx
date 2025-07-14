@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { Search, Plus } from "@bigbinary/neeto-icons";
 import { Typography, Input, Modal } from "@bigbinary/neetoui";
@@ -6,47 +6,29 @@ import { isEmpty } from "ramda";
 
 import Button from "./Button";
 
-import categoriesApi from "../../apis/categories";
+import {
+  useCreateCategory,
+  useFetchCategories,
+} from "../../hooks/reactQuery/useCategoryApi";
 import useCategoryStore from "../../store/categoryStore";
 
 const SidePanel = () => {
   const [showSearch, setShowSearch] = useState(false);
-  const [categories, setCategories] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [newCategory, setNewCategory] = useState("");
   const [searchCategory, setSearchCategory] = useState("");
-  const [loading, setLoading] = useState(true);
   const { selectedCategories, toggleCategory } = useCategoryStore();
 
   const toggleSearch = () => setShowSearch(prev => !prev);
 
-  const loadCategories = async () => {
-    try {
-      const {
-        data: { categories },
-      } = await categoriesApi.fetch();
-      setCategories(categories);
-    } catch (error) {
-      logger.error(error);
-      setLoading(false);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { mutate: createCategory } = useCreateCategory();
+  const { data, isFetching } = useFetchCategories();
+  const categories = data?.categories || [];
 
-  useEffect(() => {
-    loadCategories();
-  }, []);
-
-  const createNewCategory = async () => {
-    try {
-      await categoriesApi.create({ category: { name: newCategory } });
-      loadCategories();
-      setShowModal(false);
-      setNewCategory("");
-    } catch (error) {
-      logger.error(error);
-    }
+  const createCategoryHandler = () => {
+    createCategory({ category: { name: newCategory } });
+    setShowModal(false);
+    setNewCategory("");
   };
 
   const searchedCategories = !isEmpty(searchCategory)
@@ -76,7 +58,7 @@ const SidePanel = () => {
         )}
       </div>
       <div className="my-3 w-full">
-        {loading ? (
+        {isFetching ? (
           <Typography style="body1">Loading...</Typography>
         ) : (
           <ul className="space-y-2">
@@ -123,7 +105,7 @@ const SidePanel = () => {
           <Button
             buttonText="Add"
             style="primary"
-            onClick={createNewCategory}
+            onClick={createCategoryHandler}
           />
           <Button
             buttonText="Cancel"

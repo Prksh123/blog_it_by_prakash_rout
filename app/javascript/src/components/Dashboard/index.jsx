@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import { Typography } from "@bigbinary/neetoui";
-import postsApi from "apis/posts";
+import { useShowPosts } from "hooks/reactQuery/usePostsApi";
 import { isNil, isEmpty, either } from "ramda";
 import { Link, useHistory } from "react-router-dom";
 
@@ -10,30 +10,14 @@ import { PageLoader, PageTitle, Container, Button } from "../commons";
 import Card from "../Posts/Card";
 
 const Dashboard = () => {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const history = useHistory();
   const { selectedCategories } = useCategoryStore();
-  const fetchTasks = async () => {
-    try {
-      const {
-        data: { posts },
-      } = await postsApi.fetch();
-      setPosts(posts);
-      setLoading(false);
-    } catch (error) {
-      logger.error(error);
-      setLoading(false);
-    }
-  };
+  const { data, isFetching } = useShowPosts();
+  const posts = data?.posts || [];
 
   const showPost = slug => {
     history.push(`/posts/${slug}/show`);
   };
-
-  useEffect(() => {
-    fetchTasks();
-  }, []);
 
   const filteredPosts = !isEmpty(selectedCategories)
     ? posts.filter(post =>
@@ -43,7 +27,7 @@ const Dashboard = () => {
       )
     : posts;
 
-  if (loading) {
+  if (isFetching) {
     return (
       <div className="h-screen w-screen">
         <PageLoader />

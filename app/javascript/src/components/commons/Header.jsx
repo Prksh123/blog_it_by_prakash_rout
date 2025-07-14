@@ -1,8 +1,8 @@
 // components/posts/PostHeader.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import { Check, MenuHorizontal, ExternalLink } from "@bigbinary/neeto-icons";
-import { ActionDropdown, Dropdown } from "@bigbinary/neetoui";
+import { ActionDropdown } from "@bigbinary/neetoui";
 import { Button, PageTitle } from "components/commons";
 import { Link } from "react-router-dom";
 import { useHistory, useParams } from "react-router-dom/";
@@ -27,8 +27,24 @@ const PostHeader = ({
   const { slug } = useParams();
   const history = useHistory();
 
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const showRef = useRef();
+
   const label = status?.toLowerCase() === "draft" ? "Save as Draft" : "Publish";
-  const [showDeleteDropdown, setShowDeleteDropdown] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (showRef.current && !showRef.current.contains(event.target)) {
+        setIsMenuVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showRef]);
 
   const deletePost = async () => {
     try {
@@ -99,27 +115,23 @@ const PostHeader = ({
             </Menu>
           </ActionDropdown>
           {showOptions && (
-            <Dropdown
-              buttonStyle="text"
-              position="bottom-end"
-              customTarget={() => (
-                <button
-                  className="text-gray-600 hover:text-gray-800"
-                  onClick={() => setShowDeleteDropdown(prev => !prev)}
-                >
-                  <MenuHorizontal size={18} />
-                </button>
-              )}
+            <div
+              className="relative cursor-pointer text-lg"
+              ref={showRef}
+              onClick={() => setIsMenuVisible(prev => !prev)}
             >
-              {showDeleteDropdown && (
-                <div
-                  className="h-7 w-32 cursor-pointer px-4 py-1 text-sm text-red-700"
-                  onClick={deletePost}
-                >
-                  Delete
+              <MenuHorizontal />
+              {isMenuVisible && (
+                <div className="absolute right-0 z-20 mt-2 w-48 rounded-md border border-gray-300 bg-white py-1 shadow-xl">
+                  <Link
+                    className="block cursor-pointer px-3 py-1.5 text-sm text-red-500 hover:bg-gray-100"
+                    onClick={deletePost}
+                  >
+                    Delete
+                  </Link>
                 </div>
               )}
-            </Dropdown>
+            </div>
           )}
         </div>
       </div>

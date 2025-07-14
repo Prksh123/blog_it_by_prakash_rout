@@ -1,35 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { Typography } from "@bigbinary/neetoui";
+import { useShowMyPosts } from "hooks/reactQuery/usePostsApi";
 import { isNil, isEmpty, either } from "ramda";
 
 import Table from "./Table";
 
-import postsApi from "../../apis/posts";
 import { PageLoader } from "../commons";
 
 const MyPosts = () => {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data, isLoading } = useShowMyPosts();
+  const posts = data?.posts || [];
 
-  const fetchPosts = async () => {
-    try {
-      const {
-        data: { posts },
-      } = await postsApi.myPosts();
-      setPosts(posts);
-      setLoading(false);
-    } catch (error) {
-      logger.error(error);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="h-screen w-screen">
         <PageLoader />
@@ -45,7 +28,7 @@ const MyPosts = () => {
     );
   }
 
-  return <Table fetchPosts={fetchPosts} posts={posts} />;
+  return <Table posts={posts} />;
 };
 
 export default MyPosts;

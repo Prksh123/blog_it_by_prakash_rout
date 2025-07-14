@@ -1,20 +1,20 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { Input } from "components/commons";
 import Select from "react-select";
 
-import categoriesApi from "../../apis/categories";
+import { useFetchCategories } from "../../hooks/reactQuery/useCategoryApi";
 
 const Form = ({
   title,
   setTitle,
   description,
   setDescription,
-  categories,
-  setCategories,
   selectedCategoryIds,
   setSelectedCategoryIds,
 }) => {
+  const { data } = useFetchCategories();
+  const categories = data?.categories || [];
   const categoryOptions = categories.map(category => ({
     value: category.id,
     label: category.name,
@@ -28,22 +28,6 @@ const Form = ({
     const ids = selectedOptions.map(option => option.value);
     setSelectedCategoryIds(ids);
   };
-
-  // eslint-disable-next-line no-undef
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const {
-          data: { categories },
-        } = await categoriesApi.fetch();
-        setCategories(categories);
-      } catch (error) {
-        logger.error(error);
-      }
-    };
-
-    fetchCategories();
-  }, [setCategories]);
 
   return (
     <form className="mb-4 flex h-full w-full flex-col justify-between space-y-2 p-8">
